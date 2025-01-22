@@ -26,7 +26,7 @@ const onSearchFormSubmit = event => {
     }
     loader.style.display = 'flex';
     fetchImages(searchedQuery).then(data => {
-        // console.log(data)
+        console.log(data)
         if (data.hits.length === 0) {
             iziToast.error({
         title: 'Error',
@@ -45,8 +45,11 @@ const onSearchFormSubmit = event => {
         new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 }).refresh();
         loader.style.display = 'none';
     }).catch(error => {
-      if (error === '404') {
-          alert('error')
+      if (error.message === '404') {
+          iziToast.error({
+        title: 'Error',
+        message: "Error",
+      });
       }
   })
 }
