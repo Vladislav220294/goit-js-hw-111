@@ -3,7 +3,7 @@ export const createImageTemplate = imageInfo => {
   <a class="gallery-link" href="${imageInfo.largeImageURL}">
     <img
       class="gallery-image"
-      src="${imageInfo.webformatURL}"
+      src="${imageInfo.previewURL}"
       alt="${imageInfo.tags}"
     />
     <div class="gallery-image-description">

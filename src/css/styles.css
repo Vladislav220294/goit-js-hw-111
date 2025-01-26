@@ -29,8 +29,8 @@ a {
 
 img {
   display: block;
-  max-width: 250px;
-  height: 200px;
+  /* max-width: 250px;
+  height: 200px; */
 
 }
 
@@ -85,4 +85,16 @@ img {
 }
 .gallery-item {
   position: relative;
+};
+.is-hidden {
+  display: none;
 }
+
+.load-more-btn.is-hidden {
+  display: none;
+}
+.load-more-btn {
+  display: block;
+
+}
+
