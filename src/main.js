@@ -13,6 +13,7 @@ loader.style.display = 'none';
 let page = 1;
 let searchedQuery = '';
 
+
 const onSearchFormSubmit = async event => {
   try {galleryEl.innerHTML = '';
     event.preventDefault();
@@ -42,26 +43,27 @@ const onSearchFormSubmit = async event => {
             loader.style.display = 'none';
             return;
     }
-    if (data.hits.length === 15) { 
+    if (page * 15 < data.totalHits) { 
       loadMoreBtnEl.classList.remove('is-hidden');
       loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick)
     };
         const galleryTemplate = data.hits.map(el => createImageTemplate(el)).join('');
         
-        galleryEl.innerHTML = galleryTemplate; 
+    galleryEl.innerHTML = galleryTemplate; 
+    
     
         searchFormEl.reset();
         new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 }).refresh();
     loader.style.display = 'none';
     // loadMoreBtnEl.classList.remove('is-hidden');
-    loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick)
+    // loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick)
   }
-  catch (error) { if (error.message === '404') {
+  catch (error) { 
           iziToast.error({
         title: 'Error',
         message: "Error",
       });
-      } };
+       };
     
     
 }
@@ -72,7 +74,7 @@ function scroll() {
         const { height: cardHeight } = gallery.getBoundingClientRect();
   
     window.scrollBy({
-      top: cardHeight * 2,
+      top: cardHeight * 3,
       behavior: 'smooth',
     });
   }
@@ -84,9 +86,10 @@ const  onLoadMoreBtnClick = async event => {
     const { data } = await fetchImages(searchedQuery, page);
     const galleryTemplate = data.hits.map(el => createImageTemplate(el)).join('');
     galleryEl.insertAdjacentHTML('beforeend', galleryTemplate);
+    scroll();
     loader.style.display = 'none';
     new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 }).refresh();
-    scroll();
+    
     if (page * 15 >= data.totalHits || data.hits.length < 15) {
     loadMoreBtnEl.classList.add('is-hidden');
       loadMoreBtnEl.removeEventListener('click', onLoadMoreBtnClick);
@@ -98,11 +101,11 @@ const  onLoadMoreBtnClick = async event => {
   }
   
   catch (error) {
-if (error.message === '404') {
+
           iziToast.error({
         title: 'Error',
         message: "Error",
       });
-      }
+      
   }
 }
