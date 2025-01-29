@@ -12,6 +12,7 @@ const loader = document.querySelector('.loader');
 loader.style.display = 'none';
 let page = 1;
 let searchedQuery = '';
+const lightbox = new SimpleLightbox('.gallery a');
 
 
 const onSearchFormSubmit = async event => {
@@ -19,9 +20,11 @@ const onSearchFormSubmit = async event => {
     event.preventDefault();
      searchedQuery = event.currentTarget.elements.text.value.trim();
     if (searchedQuery === '') {
+      loadMoreBtnEl.classList.add('is-hidden');
+      loadMoreBtnEl.removeEventListener('click', onLoadMoreBtnClick);
         iziToast.error({
         title: 'Error',
-        message: "Sorry, there are no images matching your search query. Please try again!",
+        message: "Please, enter the name!",
         });
         galleryEl.innerHTML = '';
         searchFormEl.reset();
@@ -39,7 +42,9 @@ const onSearchFormSubmit = async event => {
         message: "Sorry, there are no images matching your search query. Please try again!",
       });
             galleryEl.innerHTML = '';
-            searchFormEl.reset();
+      searchFormEl.reset();
+      
+      loadMoreBtnEl.removeEventListener('click', onLoadMoreBtnClick);
             loader.style.display = 'none';
             return;
     }
@@ -53,7 +58,7 @@ const onSearchFormSubmit = async event => {
     
     
         searchFormEl.reset();
-        new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 }).refresh();
+        lightbox.refresh();
     loader.style.display = 'none';
     // loadMoreBtnEl.classList.remove('is-hidden');
     // loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick)
@@ -88,9 +93,9 @@ const  onLoadMoreBtnClick = async event => {
     galleryEl.insertAdjacentHTML('beforeend', galleryTemplate);
     scroll();
     loader.style.display = 'none';
-    new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 }).refresh();
+    lightbox.refresh();
     
-    if (page * 15 >= data.totalHits || data.hits.length < 15) {
+    if (page * 15 >= data.totalHits || data.hits.length < 15 ) {
     loadMoreBtnEl.classList.add('is-hidden');
       loadMoreBtnEl.removeEventListener('click', onLoadMoreBtnClick);
       iziToast.info({
